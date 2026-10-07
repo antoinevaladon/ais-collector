@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS collector_runs (
     run_id             bigserial   PRIMARY KEY,
     source             text        NOT NULL DEFAULT 'aisstream',
     hostname           text,
-    version            text,       -- e.g. 0.2.2+git.1a2b3c4
+    version            text,       -- e.g. 0.3.0+git.1a2b3c4
     started_at         timestamptz NOT NULL DEFAULT now(),
     last_heartbeat     timestamptz NOT NULL DEFAULT now(),
     stopped_at         timestamptz,

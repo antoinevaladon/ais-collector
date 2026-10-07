@@ -1,0 +1,25 @@
+# systemd service for the T-Dongle-S3 status screen.
+# Install, from inside the collector folder (not the display folder):
+#   sed -e "s|__USER__|$USER|g" -e "s|__DIR__|$PWD|g" display/ais-display.service | sudo tee /etc/systemd/system/ais-display.service
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now ais-display
+# Logs:    journalctl -u ais-display -f
+
+[Unit]
+Description=AIS status display (T-Dongle-S3)
+After=postgresql.service ais-collector.service
+
+[Service]
+Type=simple
+User=__USER__
+WorkingDirectory=__DIR__
+EnvironmentFile=__DIR__/.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=__DIR__/venv/bin/python display/status_display.py
+Restart=always
+RestartSec=10
+# exit code 2 = missing package: don't restart-loop
+RestartPreventExitStatus=2
+
+[Install]
+WantedBy=multi-user.target

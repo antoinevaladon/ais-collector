@@ -39,7 +39,7 @@ from websockets.asyncio.client import connect
 # Bump VERSION with every change you deploy, and note it in CHANGELOG.md.
 # Bump SCHEMA_VERSION whenever schema.sql changes (it must match the value
 # schema.sql writes into schema_info).
-VERSION = "0.2.2"
+VERSION = "0.3.0"
 SCHEMA_VERSION = 2
 
 DEFAULT_URL = "wss://stream.aisstream.io/v0/stream"

@@ -54,7 +54,7 @@ It should end with `schema is up to date: version 2`.
 venv/bin/python collector.py
 ```
 
-You should see `feed connected` and `subscription confirmed by server`. After a minute, a stats line shows messages per second. Every line starts with the version that wrote it, like `[0.2.2+git.1a2b3c4]`. Press Ctrl-C to stop; it shuts down cleanly and records that it did.
+You should see `feed connected` and `subscription confirmed by server`. After a minute, a stats line shows messages per second. Every line starts with the version that wrote it, like `[0.3.0+git.1a2b3c4]`. Press Ctrl-C to stop; it shuts down cleanly and records that it did.
 
 **7. Check the data:**
 
@@ -81,6 +81,12 @@ Day to day:
 
 Only one copy can run at a time. If you start a second one (say, from Thonny while the service is running), it refuses with a clear message instead of storing duplicates.
 
+## Status display (optional)
+
+A LilyGO T-Dongle-S3 plugged into the Pi can show the collector's health at a glance: green when collecting, orange or red when something's wrong, blinking red if the Pi goes quiet. Setup, including flashing the dongle from a Mac, is in [`display/README.md`](display/README.md).
+
+![The status display's screens](display/screens.png)
+
 ## The gap log
 
 `SELECT * FROM collection_gaps ORDER BY gap_start DESC;` lists every break in coverage with its cause:
@@ -102,18 +108,18 @@ The version appears in three places: at the start of every log line, in `collect
 
 | Version | Meaning |
 |---|---|
-| `0.2.2+git.1a2b3c4` | running from a git checkout at commit `1a2b3c4` |
-| `0.2.2+git.1a2b3c4.modified` | same commit, but files were edited and not committed |
-| `0.2.2+file.5d06c90e` | not a git checkout (e.g. unzipped); the suffix is a fingerprint of `collector.py`, so it changes if the code is edited |
+| `0.3.0+git.1a2b3c4` | running from a git checkout at commit `1a2b3c4` |
+| `0.3.0+git.1a2b3c4.modified` | same commit, but files were edited and not committed |
+| `0.3.0+file.5d06c90e` | not a git checkout (e.g. unzipped); the suffix is a fingerprint of `collector.py`, so it changes if the code is edited |
 
-The number part (`0.2.2`) comes from `VERSION` in `collector.py`, and the suffix is worked out locally at startup, so nothing needs a network connection. To find which version stored a message: `SELECT a.*, r.version FROM ais_raw a JOIN collector_runs r USING (run_id) ...`
+The number part (`0.3.0`) comes from `VERSION` in `collector.py`, and the suffix is worked out locally at startup, so nothing needs a network connection. To find which version stored a message: `SELECT a.*, r.version FROM ais_raw a JOIN collector_runs r USING (run_id) ...`
 
 **Putting it on GitHub.** The folder is ready to push as is: `.gitignore` keeps `.env` (your keys) and `venv/` out of the repository. The easiest way is GitHub's own command-line tool, run once from inside the folder:
 
 ```bash
 sudo apt install gh
 gh auth login                      # follow the prompts; choose HTTPS and log in with a browser
-git init -b main && git add . && git commit -m "AIS collector 0.2.2"
+git init -b main && git add . && git commit -m "AIS collector 0.3.0"
 gh repo create ais-collector --private --source=. --push
 ```
 
@@ -128,7 +134,7 @@ The last line creates the repository on GitHub and pushes to it in one go. Use `
 
 If you forget step 3 after a schema change, the collector won't start and says exactly what to run. `CHANGELOG.md` lists what changed in each version.
 
-**Releasing your own change:** bump `VERSION` in `collector.py`, add a line to `CHANGELOG.md`, commit, and optionally tag it (`git tag v0.3.0`). If you change `schema.sql`, also bump `SCHEMA_VERSION` in `collector.py` and the `schema_version` value at the bottom of `schema.sql`.
+**Releasing your own change:** bump `VERSION` in `collector.py`, add a line to `CHANGELOG.md`, commit, and optionally tag it (`git tag v0.4.0`). If you change `schema.sql`, also bump `SCHEMA_VERSION` in `collector.py` and the `schema_version` value at the bottom of `schema.sql`.
 
 ## Testing without the real feed
 
