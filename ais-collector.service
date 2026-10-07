@@ -1,0 +1,27 @@
+# systemd service: starts the collector at boot and restarts it if it stops.
+# Install, from inside the collector folder (works whatever the folder is called):
+#   sed -e "s|__USER__|$USER|g" -e "s|__DIR__|$PWD|g" ais-collector.service | sudo tee /etc/systemd/system/ais-collector.service
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now ais-collector
+# Logs:    journalctl -u ais-collector -f
+
+[Unit]
+Description=AIS collector (aisstream.io to PostgreSQL)
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__USER__
+WorkingDirectory=__DIR__
+EnvironmentFile=__DIR__/.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=__DIR__/venv/bin/python collector.py
+Restart=always
+RestartSec=10
+# exit code 2 = configuration error (e.g. missing API key): don't restart-loop
+RestartPreventExitStatus=2
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
