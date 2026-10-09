@@ -1,5 +1,7 @@
 # AIS collector
-
+<p align="center">
+  <img src="assets/logo.png" alt="My Project" width="200">
+</p>
 Streams live AIS ship messages from [aisstream.io](https://aisstream.io) into PostgreSQL, built to run unattended on a Raspberry Pi for months. It reconnects on its own, survives database hiccups and power cuts, and keeps a gap log that explains every missing stretch of data: feed dropped, feed went quiet, collector stopped, or collector crashed.
 
 Every message is stored complete and unfiltered (`payload` column), with MMSI, ship name and position pulled out into their own columns for fast queries.
