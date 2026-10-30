@@ -16,6 +16,17 @@ script (see .env.example). Run it directly to test; let systemd run it
 permanently (see ais-collector.service).
 """
 
+""" INSTALLING REQUIRED PACKAGES:
+If you don't have the required packages pre-installed,
+
+Clone the repository and install the dependencies:
+
+```bash
+git clone https://github.com
+cd your-repo
+pip install -r requirements.txt
+"""
+
 import asyncio
 import hashlib
 import json
@@ -43,6 +54,7 @@ VERSION = "0.3.0"
 SCHEMA_VERSION = 2
 
 DEFAULT_URL = "wss://stream.aisstream.io/v0/stream"
+# Set DEFAULT_BBOXES TO INTENDED FIXED GEOGRAPHIC AREA
 DEFAULT_BBOXES = "10,-83,31,-59"   # Caribbean basin: Florida peninsula and Keys to Trinidad, Bahamas to Colombia
 CLEAN_STOP = "clean shutdown"       # schema.sql treats any other stop_reason as a crash
 UNCLEAN_STOP = "no clean shutdown recorded (crash, kill, power loss, or stopped while the database was down)"
